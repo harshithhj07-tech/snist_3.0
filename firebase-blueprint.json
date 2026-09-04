@@ -1,0 +1,218 @@
+{
+  "entities": {
+    "profile": {
+      "title": "User Profile",
+      "description": "Demographic and settings profile for the user",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "state": { "type": "string", "maxLength": 50 },
+        "occupation": { "type": "string", "maxLength": 100 },
+        "income": { "type": "string", "maxLength": 50 },
+        "caste": { "type": "string", "maxLength": 50 },
+        "role": { "type": "string", "maxLength": 50 },
+        "isLoggedIn": { "type": "boolean" },
+        "existingDocs": { "type": "array" },
+        "businessName": { "type": "string", "maxLength": 100 },
+        "msmeCategory": { "type": "string", "maxLength": 50 },
+        "onboardingCompleted": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "email", "state"]
+    },
+    "roadmap": {
+      "title": "Roadmap",
+      "description": "A compliance path with phases and associated items",
+      "type": "object",
+      "properties": {
+        "goal": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "maxLength": 100 },
+        "completionPercentage": { "type": "number" },
+        "phases": { "type": "array" },
+        "documents": { "type": "array" },
+        "eligibleSchemes": { "type": "array" },
+        "potentialFutureServices": { "type": "array" },
+        "commonMistakes": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["goal", "category"]
+    },
+    "message": {
+      "title": "Chat Message",
+      "description": "A single chat message in a history thread",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "maxLength": 20 },
+        "content": { "type": "string", "maxLength": 10000 },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "role", "content"]
+    },
+    "bookmark": {
+      "title": "Bookmark",
+      "description": "A saved resource portal reference",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "link": { "type": "string", "maxLength": 500 },
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "link"]
+    },
+    "history_item": {
+      "title": "History Item",
+      "description": "A historical search query",
+      "type": "object",
+      "properties": {
+        "query": { "type": "string", "maxLength": 300 },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["query"]
+    },
+    "document": {
+      "title": "Document",
+      "description": "A user document stored in vault",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "name": { "type": "string", "maxLength": 200 }
+      },
+      "required": ["id", "name"]
+    },
+    "notification": {
+      "title": "Notification",
+      "description": "A user notification or alert",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "title": { "type": "string", "maxLength": 300 }
+      },
+      "required": ["id", "title"]
+    },
+    "eligibility_check": {
+      "title": "Eligibility Check",
+      "description": "User scheme eligibility audit result",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "schemeId": { "type": "string", "maxLength": 100 }
+      },
+      "required": ["id", "schemeId"]
+    },
+    "ai_conversation": {
+      "title": "AI Conversation",
+      "description": "Full conversation thread with messages, context refs, and status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "userId": { "type": "string", "maxLength": 100 },
+        "title": { "type": "string", "maxLength": 200 },
+        "workspaceId": { "type": "string", "maxLength": 50 },
+        "status": { "type": "string", "maxLength": 20 },
+        "pinned": { "type": "boolean" },
+        "favorite": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "title"]
+    },
+    "workspace": {
+      "title": "AI Workspace",
+      "description": "Custom or system workspace category for organizing citizen topics",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "name": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 500 }
+      },
+      "required": ["id", "name"]
+    },
+    "timeline_event": {
+      "title": "Citizen Timeline Event",
+      "description": "Unified citizen timeline event log",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 },
+        "title": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["id", "title", "category"]
+    },
+    "app_data": {
+      "title": "App Data",
+      "description": "Custom key-value application state persistence",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 100 }
+      },
+      "required": ["id"]
+    }
+  },
+  "firestore": {
+    "profiles/{userId}": {
+      "schema": "profile",
+      "description": "The user demographic profile document"
+    },
+    "profiles/{userId}/roadmaps/{roadmapId}": {
+      "schema": "roadmap",
+      "description": "Generated compliance roadmaps saved by or active for the user"
+    },
+    "profiles/{userId}/messages/{messageId}": {
+      "schema": "message",
+      "description": "Chat transcript messages saved for persistence"
+    },
+    "profiles/{userId}/ai_conversations/{conversationId}": {
+      "schema": "ai_conversation",
+      "description": "Persistent AI conversation threads for the citizen"
+    },
+    "profiles/{userId}/workspaces/{workspaceId}": {
+      "schema": "workspace",
+      "description": "User AI topic workspaces"
+    },
+    "profiles/{userId}/timeline/{eventId}": {
+      "schema": "timeline_event",
+      "description": "Citizen interaction timeline event"
+    },
+    "profiles/{userId}/bookmarks/{bookmarkId}": {
+      "schema": "bookmark",
+      "description": "Saved portals and helpful official links"
+    },
+    "profiles/{userId}/history/{historyId}": {
+      "schema": "history_item",
+      "description": "Citizen navigation search history logs"
+    },
+    "profiles/{userId}/documents/{docId}": {
+      "schema": "document",
+      "description": "User document records"
+    },
+    "profiles/{userId}/notifications/{notifId}": {
+      "schema": "notification",
+      "description": "User notifications"
+    },
+    "profiles/{userId}/eligibilityChecks/{checkId}": {
+      "schema": "eligibility_check",
+      "description": "User eligibility check records"
+    },
+    "profiles/{userId}/appData/{dataKey}": {
+      "schema": "app_data",
+      "description": "Dynamic app state records (CMS articles, forum threads, shop orders, campaigns, consultations)"
+    },
+    "ai_conversations/{conversationId}": {
+      "schema": "ai_conversation",
+      "description": "Top-level collection for AI conversations"
+    },
+    "government_sources/{sourceId}": {
+      "schema": "government_source",
+      "description": "Government Source Registry records for verified grounded RAG"
+    },
+    "government_source_versions/{versionId}": {
+      "schema": "government_source_version",
+      "description": "Historical version snapshots for Government Source Registry records"
+    }
+  }
+}

@@ -1,0 +1,194 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ==========================================
+    // HELPER FUNCTIONS (The Eight Pillars)
+    // ==========================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && (request.auth.uid == userId || userId == 'default-user' || (request.auth.token != null && 'email' in request.auth.token && request.auth.token.email == userId));
+    }
+
+    function isValidId(docId) {
+      return docId is string && docId.size() >= 1 && docId.size() <= 128 && docId.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidString(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    function isValidOptionalString(data, fieldName, maxLen) {
+      return !(fieldName in data) || (data[fieldName] is string && data[fieldName].size() <= maxLen);
+    }
+
+    function isValidOptionalBool(data, fieldName) {
+      return !(fieldName in data) || (data[fieldName] is bool);
+    }
+
+    // ==========================================
+    // VALIDATION BLUEPRINTS
+    // ==========================================
+
+    function isValidProfile(data) {
+      return data.keys().hasAll(['name', 'email', 'state'])
+        && isValidString(data.name, 1, 100)
+        && isValidString(data.email, 3, 150)
+        && isValidString(data.state, 1, 50)
+        && isValidOptionalString(data, 'occupation', 100)
+        && isValidOptionalString(data, 'income', 50)
+        && isValidOptionalString(data, 'caste', 50)
+        && isValidOptionalString(data, 'role', 50)
+        && isValidOptionalString(data, 'businessName', 100)
+        && isValidOptionalString(data, 'msmeCategory', 50)
+        && isValidOptionalBool(data, 'isLoggedIn')
+        && isValidOptionalBool(data, 'onboardingCompleted');
+    }
+
+    function isValidRoadmap(data) {
+      return data.keys().hasAll(['goal', 'category'])
+        && isValidString(data.goal, 1, 200)
+        && isValidString(data.category, 1, 100);
+    }
+
+    function isValidMessage(data) {
+      return data.keys().hasAll(['id', 'role', 'content'])
+        && isValidString(data.id, 1, 100)
+        && isValidString(data.role, 1, 20)
+        && isValidString(data.content, 1, 10000);
+    }
+
+    function isValidAiConversation(data) {
+      return data.keys().hasAll(['id', 'title'])
+        && isValidString(data.id, 1, 100)
+        && isValidString(data.title, 1, 200)
+        && isValidOptionalString(data, 'userId', 100)
+        && isValidOptionalString(data, 'workspaceId', 50)
+        && isValidOptionalString(data, 'status', 20)
+        && isValidOptionalBool(data, 'pinned');
+    }
+
+    function isValidWorkspace(data) {
+      return data.keys().hasAll(['id', 'name'])
+        && isValidString(data.id, 1, 100)
+        && isValidString(data.name, 1, 100)
+        && isValidOptionalString(data, 'description', 500);
+    }
+
+    function isValidTimelineEvent(data) {
+      return data.keys().hasAll(['id', 'title', 'category'])
+        && isValidString(data.id, 1, 100)
+        && isValidString(data.title, 1, 200)
+        && isValidString(data.category, 1, 50);
+    }
+
+    function isValidBookmark(data) {
+      return data.keys().hasAll(['id', 'link'])
+        && isValidString(data.id, 1, 100)
+        && isValidString(data.link, 1, 500)
+        && isValidOptionalString(data, 'title', 200)
+        && isValidOptionalString(data, 'description', 1000);
+    }
+
+    function isValidDocument(data) {
+      return data.keys().hasAll(['id', 'name'])
+        && isValidString(data.id, 1, 100)
+        && isValidString(data.name, 1, 200);
+    }
+
+    function isValidNotification(data) {
+      return data.keys().hasAll(['id', 'title'])
+        && isValidString(data.id, 1, 100)
+        && isValidString(data.title, 1, 300);
+    }
+
+    function isValidEligibilityCheck(data) {
+      return data.keys().hasAll(['id', 'schemeId'])
+        && isValidString(data.id, 1, 100)
+        && isValidString(data.schemeId, 1, 100);
+    }
+
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Connection testing endpoint
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+
+    // Profiles & Subcollections
+    match /profiles/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow list: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidId(userId) && isValidProfile(request.resource.data);
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      match /roadmaps/{roadmapId} {
+        allow read, delete: if isOwner(userId) && isValidId(roadmapId);
+        allow create, update: if isOwner(userId) && isValidId(roadmapId) && isValidRoadmap(request.resource.data);
+      }
+
+      match /messages/{messageId} {
+        allow read, delete: if isOwner(userId) && isValidId(messageId);
+        allow create, update: if isOwner(userId) && isValidId(messageId) && isValidMessage(request.resource.data);
+      }
+
+      match /ai_conversations/{conversationId} {
+        allow read, delete: if isOwner(userId) && isValidId(conversationId);
+        allow create, update: if isOwner(userId) && isValidId(conversationId) && isValidAiConversation(request.resource.data);
+      }
+
+      match /workspaces/{workspaceId} {
+        allow read, delete: if isOwner(userId) && isValidId(workspaceId);
+        allow create, update: if isOwner(userId) && isValidId(workspaceId) && isValidWorkspace(request.resource.data);
+      }
+
+      match /timeline/{eventId} {
+        allow read, delete: if isOwner(userId) && isValidId(eventId);
+        allow create, update: if isOwner(userId) && isValidId(eventId) && isValidTimelineEvent(request.resource.data);
+      }
+
+      match /bookmarks/{bookmarkId} {
+        allow read, delete: if isOwner(userId) && isValidId(bookmarkId);
+        allow create, update: if isOwner(userId) && isValidId(bookmarkId) && isValidBookmark(request.resource.data);
+      }
+
+      match /history/{historyId} {
+        allow read, write: if isOwner(userId) && isValidId(historyId);
+      }
+
+      match /documents/{docId} {
+        allow read, delete: if isOwner(userId) && isValidId(docId);
+        allow create, update: if isOwner(userId) && isValidId(docId) && isValidDocument(request.resource.data);
+      }
+
+      match /notifications/{notifId} {
+        allow read, delete: if isOwner(userId) && isValidId(notifId);
+        allow create, update: if isOwner(userId) && isValidId(notifId) && isValidNotification(request.resource.data);
+      }
+
+      match /eligibilityChecks/{checkId} {
+        allow read, delete: if isOwner(userId) && isValidId(checkId);
+        allow create, update: if isOwner(userId) && isValidId(checkId) && isValidEligibilityCheck(request.resource.data);
+      }
+
+      match /appData/{dataKey} {
+        allow read, write: if isOwner(userId) && isValidId(dataKey);
+      }
+    }
+
+    // Top-Level AI Conversations
+    match /ai_conversations/{conversationId} {
+      allow get: if isSignedIn() && isValidId(conversationId);
+      allow list: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidId(conversationId) && isValidAiConversation(request.resource.data);
+      allow delete: if isSignedIn() && isValidId(conversationId);
+    }
+  }
+}
