@@ -47,6 +47,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   const [activeStep, setActiveStep] = useState<number>(0);
   const [selectedOrchestratorNode, setSelectedOrchestratorNode] = useState<string | null>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [activeProductCard, setActiveProductCard] = useState<number>(2);
 
   // Scroll detection for header navbar styling
   useEffect(() => {
@@ -128,6 +129,32 @@ export const LandingPage: React.FC<LandingPageProps> = ({
     <div className={`min-h-screen w-full font-sans overflow-x-hidden ${
       isLightTheme ? "bg-[#f8fafc] text-slate-900" : "bg-[#050811] text-white"
     }`}>
+      {/* Global Fixed Galaxy Starfield Background */}
+      <div className="fixed inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+        <img
+          src="/deep_starfield.jpg"
+          alt="Monochrome Starfield Galaxy Background"
+          referrerPolicy="no-referrer"
+          className="w-full h-full object-cover scale-105 filter brightness-95 contrast-110 animate-star-drift animate-star-twinkle"
+        />
+        {/* Subtle Dark Gradient Overlay for Contrast & Readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050811]/80 via-[#060b17]/70 to-[#050811]/90 z-10" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500/5 via-transparent to-transparent z-10" />
+        
+        {/* Ambient Glowing Orbs */}
+        <motion.div 
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.4, 0.2]
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-amber-500/20 rounded-full blur-[150px] z-10"
+        />
+      </div>
       {/* HEADER / NAVIGATION BAR */}
       <motion.header 
         initial={{ y: -100, opacity: 0 }}
@@ -262,32 +289,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
       {/* HERO SECTION WITH GALAXY STARFIELD BACKGROUND */}
       <section className="relative min-h-screen flex items-center justify-center pt-24 pb-16 overflow-hidden">
-        {/* Galaxy Star Image Background Surface */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
-          <img
-            src="/deep_starfield.jpg"
-            alt="Monochrome Starfield Galaxy Background"
-            referrerPolicy="no-referrer"
-            className="w-full h-full object-cover scale-105 filter brightness-95 contrast-110 animate-star-drift animate-star-twinkle"
-          />
-          {/* Subtle Dark Gradient Overlay for Contrast & Readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050811]/80 via-[#060b17]/70 to-[#050811]/90 z-10 pointer-events-none" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent z-10 pointer-events-none" />
-          
-          {/* Ambient Glowing Orbs */}
-          <motion.div 
-            animate={{ 
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.6, 0.3]
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/30 rounded-full blur-[140px] z-10 pointer-events-none"
-          />
-        </div>
+        
 
         {/* Hero Content Container */}
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-20 space-y-8 my-auto">
@@ -296,10 +298,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-400 text-[11px] font-mono font-bold tracking-widest uppercase shadow-[0_0_15px_rgba(245,158,11,0.5)] backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/50 text-amber-400 text-[11px] font-mono font-bold tracking-widest uppercase shadow-[0_0_30px_rgba(245,158,11,0.8)] backdrop-blur-md border-amber-500/80"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>UNDERSTAND • ORGANIZE • NAVIGATE • ACT</span>
+            <span className="text-amber-400 font-bold drop-shadow-[0_0_8px_rgba(245,158,11,0.8)]">UNDERSTAND • ORGANIZE • NAVIGATE • ACT</span>
           </motion.div>
 
           {/* Hero Main Titles */}
@@ -374,8 +376,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       </section>
 
       {/* PROBLEM SECTION (#problem) */}
-      <section id="problem" className={`py-20 border-t ${
-        isLightTheme ? "bg-white border-slate-200" : "bg-[#070b14] border-white/10"
+      <section id="problem" className={`relative z-10 py-20 border-t ${
+        isLightTheme ? "bg-white border-slate-200" : "bg-transparent border-white/5"
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           <motion.div 
@@ -404,8 +406,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
               viewport={{ once: true, margin: "-100px" }}
-              className={`p-6 sm:p-8 rounded-2xl border space-y-5 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] backdrop-blur-md transition-all duration-700 hover:shadow-xl hover:-translate-y-1 ${
-              isLightTheme ? "bg-red-50/70 border-red-200" : "bg-red-500/[0.05] border-red-500/20"
+              className={`p-6 sm:p-8 rounded-2xl border space-y-5 backdrop-blur-md transition-all duration-700 hover:shadow-xl hover:-translate-y-1 ${
+              isLightTheme ? "bg-red-50/70 border-red-200 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)]" : "bg-red-500/[0.05] border-red-500/20 shadow-[0_0_30px_rgba(239,68,68,0.15)] ring-1 ring-red-500/10"
             }`}>
               <div className="flex items-center gap-2 text-red-500 font-mono font-bold text-xs uppercase tracking-wider">
                 <AlertTriangle className="w-4 h-4" />
@@ -419,7 +421,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   "Scattered physical certificates without automated expiry or validity tracking",
                   "Multiple rejected applications due to unknown prerequisite criteria"
                 ].map((item, idx) => (
-                  <div key={idx} className="flex items-start gap-3 p-3 bg-red-500/5 rounded-xl border border-red-500/10 transition-colors duration-300 hover:bg-red-500/10">
+                  <div key={idx} className="flex items-start gap-3 p-3 bg-red-500/5 rounded-xl border border-red-500/10 transition-colors duration-300 hover:bg-red-500/10 hover:shadow-[0_0_15px_rgba(239,68,68,0.1)]">
                     <span className="text-red-500 font-bold shrink-0">✕</span>
                     <span className={isLightTheme ? "text-slate-800" : "text-slate-300"}>{item}</span>
                   </div>
@@ -433,8 +435,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
               viewport={{ once: true, margin: "-100px" }}
-              className={`p-6 sm:p-8 rounded-2xl border space-y-5 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] backdrop-blur-md transition-all duration-700 hover:shadow-xl hover:-translate-y-1 ${
-              isLightTheme ? "bg-amber-50/70 border-amber-200" : "bg-amber-500/[0.06] border-amber-500/20"
+              className={`p-6 sm:p-8 rounded-2xl border space-y-5 backdrop-blur-md transition-all duration-700 hover:shadow-xl hover:-translate-y-1 ${
+              isLightTheme ? "bg-amber-50/70 border-amber-200 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)]" : "bg-amber-500/[0.06] border-amber-500/20 shadow-[0_0_30px_rgba(245,158,11,0.15)] ring-1 ring-amber-500/10"
             }`}>
               <div className="flex items-center gap-2 text-amber-500 font-mono font-bold text-xs uppercase tracking-wider">
                 <ShieldCheck className="w-4 h-4 text-amber-500" />
@@ -460,8 +462,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       </section>
 
       {/* SOLUTION / HOW IT WORKS SECTION (#how-it-works) */}
-      <section id="how-it-works" className={`py-20 border-t ${
-        isLightTheme ? "bg-slate-50 border-slate-200" : "bg-[#050811] border-white/10"
+      <section id="how-it-works" className={`relative z-10 py-20 border-t ${
+        isLightTheme ? "bg-slate-50 border-slate-200" : "bg-transparent border-white/5"
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
           <motion.div 
@@ -555,8 +557,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       </section>
 
       {/* CORE PRODUCT SUITE (#product) */}
-      <section id="product" className={`py-20 border-t ${
-        isLightTheme ? "bg-white border-slate-200" : "bg-[#070b14] border-white/10"
+      <section id="product" className={`relative z-10 py-20 border-t ${
+        isLightTheme ? "bg-white border-slate-200" : "bg-transparent border-white/5"
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
           <motion.div 
@@ -577,16 +579,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </p>
           </motion.div>
 
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
-            }}
-            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4"
-          >
+          <div className="relative w-full max-w-5xl mx-auto h-[450px] flex items-center justify-center mt-12 perspective-[1200px]">
             {[
               {
                 pillar: "UNDERSTAND",
@@ -620,48 +613,113 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               }
             ].map((col, idx) => {
               const Icon = col.icon;
+              const isActive = activeProductCard === idx;
+              const offset = idx - activeProductCard;
+              const absOffset = Math.abs(offset);
+              
+              // Calculate transform styles based on offset
+              const zIndex = 10 - absOffset;
+              const scale = isActive ? 1 : Math.max(0.7, 1 - absOffset * 0.15);
+              const translateX = offset * 180; // Overlap horizontal distance
+              const opacity = absOffset > 2 ? 0 : isActive ? 1 : Math.max(0.3, 1 - absOffset * 0.4);
+              const blur = isActive ? "blur-0" : absOffset === 1 ? "blur-[2px]" : "blur-[4px]";
+
               return (
                 <motion.div
                   key={idx}
-                  variants={{
-                    hidden: { opacity: 0, y: 30 },
-                    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+                  onClick={() => setActiveProductCard(idx)}
+                  animate={{
+                    x: translateX,
+                    scale: scale,
+                    zIndex: zIndex,
+                    opacity: opacity
                   }}
-                  className={`p-5 rounded-2xl border space-y-4 backdrop-blur-md transition-all duration-500 hover:-translate-y-2 hover:shadow-xl ${
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className={`absolute w-[280px] sm:w-[320px] p-6 rounded-3xl border cursor-pointer transition-all duration-300 ${blur} ${
                     isLightTheme
-                      ? "bg-white/60 border-slate-200 hover:border-amber-400 shadow-[0_8px_32px_0_rgba(0,0,0,0.03)] hover:shadow-[0_0_20px_rgba(245,158,11,0.2)]"
-                      : "bg-white/[0.02] border-white/10 hover:border-amber-500/60 hover:bg-white/[0.06] shadow-[0_8px_32px_0_rgba(0,0,0,0.2)] hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]"
-                  }`}
+                      ? "bg-white/90 border-slate-200 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)]"
+                      : "bg-[#090e1a]/80 border-white/10 shadow-[0_20px_50px_-10px_rgba(0,0,0,0.7)]"
+                  } ${isActive ? (isLightTheme ? "border-amber-400 ring-4 ring-amber-400/20 shadow-[0_0_30px_rgba(245,158,11,0.2)]" : "border-amber-500/80 ring-2 ring-amber-500/40 shadow-[0_0_40px_rgba(245,158,11,0.25)]") : ""}`}
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-amber-500 uppercase tracking-widest">
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="text-4xl font-black opacity-10">0{idx + 1}</span>
+                    <span className="text-[9px] font-mono font-bold px-3 py-1.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20 uppercase tracking-widest">
                       {col.pillar}
                     </span>
-                    <Icon className="w-4 h-4 text-amber-400" />
                   </div>
 
-                  <p className={`text-xs font-bold ${isLightTheme ? "text-slate-800" : "text-white"}`}>
-                    {col.desc}
-                  </p>
+                  <div className="space-y-4">
+                    <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center">
+                      <Icon className="w-6 h-6 text-amber-500" />
+                    </div>
+                    <h3 className={`text-xl font-bold font-display ${isLightTheme ? "text-slate-900" : "text-white"}`}>
+                      {col.desc}
+                    </h3>
+                  </div>
 
-                  <div className="space-y-2 pt-2 border-t border-white/5">
+                  <div className="space-y-3 pt-6 mt-6 border-t border-white/10">
                     {col.items.map((item, iIdx) => (
-                      <div key={iIdx} className="flex items-center gap-2 text-[11px]">
-                        <Check className="w-3 h-3 text-amber-400 shrink-0" />
-                        <span className={isLightTheme ? "text-slate-600" : "text-slate-300"}>{item}</span>
+                      <div key={iIdx} className="flex items-start gap-2">
+                        <Check className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
+                        <span className={`text-xs font-medium leading-relaxed ${isLightTheme ? "text-slate-600" : "text-slate-300"}`}>{item}</span>
                       </div>
                     ))}
                   </div>
                 </motion.div>
               );
             })}
-          </motion.div>
+          </div>
+
+          {/* Carousel Controls */}
+          <div className="flex items-center justify-center gap-6 mt-2 relative z-20">
+            <button 
+              onClick={() => setActiveProductCard(prev => Math.max(0, prev - 1))}
+              disabled={activeProductCard === 0}
+              className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+                activeProductCard === 0 
+                  ? "opacity-30 cursor-not-allowed" 
+                  : isLightTheme 
+                    ? "bg-white shadow hover:bg-slate-50 text-slate-800" 
+                    : "bg-[#090e1a] border border-white/10 hover:bg-white/10 text-white"
+              }`}
+            >
+              <ChevronRight className="w-6 h-6 rotate-180" />
+            </button>
+
+            <div className="flex items-center gap-2">
+              {[0, 1, 2, 3, 4].map((idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setActiveProductCard(idx)}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    activeProductCard === idx 
+                      ? "w-8 bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]" 
+                      : isLightTheme ? "w-2 bg-slate-300" : "w-2 bg-white/20"
+                  }`}
+                />
+              ))}
+            </div>
+
+            <button 
+              onClick={() => setActiveProductCard(prev => Math.min(4, prev + 1))}
+              disabled={activeProductCard === 4}
+              className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+                activeProductCard === 4 
+                  ? "opacity-30 cursor-not-allowed" 
+                  : isLightTheme 
+                    ? "bg-white shadow hover:bg-slate-50 text-slate-800" 
+                    : "bg-[#090e1a] border border-white/10 hover:bg-white/10 text-white"
+              }`}
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       </section>
 
       {/* AI ORCHESTRATOR ARCHITECTURE VISUALIZATION (#ai-orchestrator) */}
-      <section id="ai-orchestrator" className={`py-20 border-t ${
-        isLightTheme ? "bg-slate-50 border-slate-200" : "bg-[#050811] border-white/10"
+      <section id="ai-orchestrator" className={`relative z-10 py-20 border-t ${
+        isLightTheme ? "bg-slate-50 border-slate-200" : "bg-transparent border-white/5"
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
@@ -762,8 +820,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       </section>
 
       {/* REAL CITIZEN JOURNEY CASE STUDY (#journey) */}
-      <section id="journey" className={`py-20 border-t ${
-        isLightTheme ? "bg-white border-slate-200" : "bg-[#070b14] border-white/10"
+      <section id="journey" className={`relative z-10 py-20 border-t ${
+        isLightTheme ? "bg-white border-slate-200" : "bg-transparent border-white/5"
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
           <motion.div 
@@ -822,8 +880,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       </section>
 
       {/* SECURITY & PRIVACY (#security) */}
-      <section id="security" className={`py-20 border-t ${
-        isLightTheme ? "bg-slate-50 border-slate-200" : "bg-[#050811] border-white/10"
+      <section id="security" className={`relative z-10 py-20 border-t ${
+        isLightTheme ? "bg-slate-50 border-slate-200" : "bg-transparent border-white/5"
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-left">
           <motion.div 
@@ -891,8 +949,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       </section>
 
       {/* FOOTER CTA */}
-      <footer className={`py-12 border-t relative overflow-hidden ${
-        isLightTheme ? "bg-white border-slate-200 text-slate-700" : "bg-[#04060c] border-white/10 text-white/70"
+      <footer className={`py-12 border-t relative z-10 overflow-hidden ${
+        isLightTheme ? "bg-white border-slate-200 text-slate-700" : "bg-transparent border-white/5 text-white/70"
       }`}>
         {/* Subtle blur background element for footer */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-full bg-amber-500/5 blur-3xl pointer-events-none rounded-full" />

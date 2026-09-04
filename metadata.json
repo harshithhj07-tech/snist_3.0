@@ -1,12 +1,1 @@
-{
-  "name": "Remix Remix Bharat Navigator",
-  "description": "An AI Government Process Planner for India that converts citizen goals into legally accurate, dependency-aware roadmaps with secure Google Sheets \u0026 Drive RAG integration.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone",
-    "geolocation"
-  ],
-  "majorCapabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_FEATHERLESS_API"
-  ]
-}
+{"name":"Remix Remix Remix Bharat Navigator","description":"An AI Government Process Planner for India that converts citizen goals into legally accurate, dependency-aware roadmaps with secure Google Sheets \u0026 Drive RAG integration.","requestFramePermissions":["camera","microphone","geolocation"],"majorCapabilities":["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]}
