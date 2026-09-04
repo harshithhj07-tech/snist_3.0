@@ -1,4 +1,4 @@
-# Remix Remix Bharat Navigator
+Bharat Navigator
 
 An AI Government Process Planner for India powered purely by Featherless AI.
 
